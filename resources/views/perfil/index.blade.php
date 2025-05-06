@@ -24,7 +24,7 @@
                 <p id="correo-error" class="text-error mt-2 hidden"></p>
             </div>            
             <p><span class="font-semibold">Rol:</span> {{ ucfirst($usuario->rol) }}</p>
-            <a href="{{ route('password.edit') }}" class="btn btn-outline btn-sm mb-4">Cambiar contraseña</a>
+            <a href="{{ route('pass.edit') }}" class="btn btn-outline btn-sm mb-4">Cambiar contraseña</a>
         </div>
     </div>
 
