@@ -49,6 +49,8 @@ class HorariosClaseController extends Controller
         // Eliminar todos los horarios existentes antes de importar nuevos
         HorariosClase::truncate();
 
+        set_time_limit(300);
+
         $archivo = $request->file('archivo')->getPathname();
         $spreadsheet = IOFactory::load($archivo);
         $rows = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);

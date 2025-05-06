@@ -100,6 +100,7 @@ class UserCreateController extends Controller
 
     public function storeMassive(Request $request)
     {
+        set_time_limit(300);
         $preview = unserialize(base64_decode($request->input('data_serialized', '')));
         $csvPath = storage_path('app/public/usuarios_creados.csv');
         $csv = fopen($csvPath, 'w');
