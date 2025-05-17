@@ -22,13 +22,15 @@ Route::middleware(['auth'])->group(function () {
 
     Route::match(['get', 'post'], '/perfil', [PerfilController::class, 'index'])->name('perfil');
     Route::post('/perfil/email', [PerfilController::class, 'updateEmail'])->name('perfil.updateEmail');
+    Route::post('/perfil/nombre', [PerfilController::class, 'updateNombre'])->name('perfil.updateNombre');
+    Route::post('/perfil/apellido', [PerfilController::class, 'updateApellido'])->name('perfil.updateApellido');
 
     Route::get('/cambiar-contraseña', [PasswordController::class, 'edit'])->name('pass.edit');
     Route::post('/cambiar-contraseña', [PasswordController::class, 'update'])->name('pass.update');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard'); //Poner algo es esta pagina
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::match(['get', 'post'], '/', [UserController::class, 'index'])->name('index');

@@ -85,83 +85,89 @@
 
     {{-- Botón --}}
     <div class="flex justify-end items-end">
-        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <button type="submit" class="btn btn-primary w-full">Filtrar</button>
     </div>
 </form>
 
 @if ($reservas->isEmpty())
     <p class="text-gray-600">No tienes reservas registradas.</p>
 @else
-    <div class="overflow-x-auto">
-        @php
-            $ordenActual = request('orden');
-            $direccionActual = request('direccion', 'asc');
+    @php
+        $ordenActual = request('orden');
+        $direccionActual = request('direccion', 'asc');
 
-            function ordenarPor($columna) {
-                $direccion = request('orden') === $columna && request('direccion') === 'asc' ? 'desc' : 'asc';
-                return array_merge(request()->all(), ['orden' => $columna, 'direccion' => $direccion]);
-            }
+        function ordenarPor($columna) {
+            $direccion = request('orden') === $columna && request('direccion') === 'asc' ? 'desc' : 'asc';
+            return array_merge(request()->all(), ['orden' => $columna, 'direccion' => $direccion]);
+        }
 
-            function iconoOrdenSvg($columna) {
-                if (request('orden') !== $columna) return '';
+        function iconoOrdenSvg($columna) {
+            if (request('orden') !== $columna) return '';
 
-                return request('direccion') === 'asc'
-                    ? '<svg class="inline w-6 h-6 mb-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M10 6l-5 6h10l-5-6z" /></svg>'
-                    : '<svg class="inline w-6 h-6 mb-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M10 14l5-6H5l5 6z" /></svg>';
-            }
-        @endphp
+            return request('direccion') === 'asc'
+                ? '<svg class="inline w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 mb-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M10 6l-5 6h10l-5-6z" /></svg>'
+                : '<svg class="inline w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 mb-1" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18"><path d="M10 14l5-6H5l5 6z" /></svg>';
+        }
+    @endphp
 
-        <table class="table w-full table-zebra">
-            <thead>
+    <table class="table w-full table-zebra">
+        <thead>
+            <tr>
+                <th><a href="{{ route('perfil', ordenarPor('fecha')) }}">Fecha {!! iconoOrdenSvg('fecha') !!}</a></th>
+                <th class="md:hidden"><a href="{{ route('perfil', ordenarPor('hora_inicio')) }}">Horario {!! iconoOrdenSvg('hora_inicio') !!}</a></th> {{-- Solo visible en móvil --}}
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('hora_inicio')) }}">Inicio {!! iconoOrdenSvg('hora_inicio') !!}</a></th>
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('hora_fin')) }}">Fin {!! iconoOrdenSvg('hora_fin') !!}</a></th>
+                <th><a href="{{ route('perfil', ordenarPor('uso')) }}">Uso {!! iconoOrdenSvg('uso') !!}</a></th>
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('aula')) }}">Aula {!! iconoOrdenSvg('aula') !!}</a></th>
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('edificio')) }}">Edificio {!! iconoOrdenSvg('edificio') !!}</a></th>
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('planta')) }}">Planta {!! iconoOrdenSvg('planta') !!}</a></th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($reservas as $reserva)
                 <tr>
-                    <th><a href="{{ route('perfil', ordenarPor('fecha')) }}">Fecha {!! iconoOrdenSvg('fecha') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('hora_inicio')) }}">Inicio {!! iconoOrdenSvg('hora_inicio') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('hora_fin')) }}">Fin {!! iconoOrdenSvg('hora_fin') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('uso')) }}">Uso {!! iconoOrdenSvg('uso') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('aula')) }}">Aula {!! iconoOrdenSvg('aula') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('edificio')) }}">Edificio {!! iconoOrdenSvg('edificio') !!}</a></th>
-                    <th><a href="{{ route('perfil', ordenarPor('planta')) }}">Planta {!! iconoOrdenSvg('planta') !!}</a></th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($reservas as $reserva)
-                    <tr>
-                        <td>{{ date('d/m/Y', strtotime($reserva->fecha)) }}</td>
-                        <td>{{ substr($reserva->hora_inicio, 0, 5) }}</td>
-                        <td>{{ substr($reserva->hora_fin, 0, 5) }}</td>
-                        <td>{{ ucfirst($reserva->uso) }}</td>
-                        <td>{{ $reserva->aula->codigo }} - {{ $reserva->aula->nombre }}</td>
-                        <td>{{ $reserva->aula->edificio }}</td>
-                        <td>{{ $reserva->aula->planta }}</td>
-                        <td>
-                            @php
-                                $esFutura = $reserva->fecha > $hoy || ($reserva->fecha === $hoy && $reserva->hora_inicio > $ahora);
-                                $enCurso = $reserva->fecha === $hoy && $reserva->hora_inicio <= $ahora && $reserva->hora_fin > $ahora;
-                                $finalizada = $reserva->fecha < $hoy || ($reserva->fecha === $hoy && $reserva->hora_fin <= $ahora);
-                            @endphp
+                    <td>{{ date('d/m', strtotime($reserva->fecha)) }}</td>
 
-                            @if ($esFutura)
-                                <form id="form-cancelar-{{ $reserva->id }}" method="POST" action="{{ route('mis-reservas.destroy', $reserva) }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <label for="cancelar-modal" class="btn btn-sm btn-error abrir-modal" data-id="{{ $reserva->id }}">
-                                        Cancelar
-                                    </label>
-                                </form>
-                            @elseif ($enCurso)
-                                <span class="text-warning font-semibold">En curso</span>
-                            @elseif ($finalizada)
-                                <span class="text-success font-semibold">Finalizada</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="mt-6">
-            {{ $reservas->links('vendor.pagination.daisy') }}
-        </div>
+                    {{-- Columna combinada solo visible en móvil --}}
+                    <td class="md:hidden">{{ substr($reserva->hora_inicio, 0, 5) }} - {{ substr($reserva->hora_fin, 0, 5) }}</td>
+
+                    {{-- Columnas separadas para tablet en adelante --}}
+                    <td class="hidden md:table-cell">{{ substr($reserva->hora_inicio, 0, 5) }}</td>
+                    <td class="hidden md:table-cell">{{ substr($reserva->hora_fin, 0, 5) }}</td>
+
+                    <td>{{ ucfirst($reserva->uso) }}</td>
+                    <td class="hidden md:table-cell">{{ $reserva->aula->codigo }} - {{ $reserva->aula->nombre }}</td>
+                    <td class="hidden md:table-cell">{{ $reserva->aula->edificio }}</td>
+                    <td class="hidden md:table-cell">{{ $reserva->aula->planta }}</td>
+
+                    <td>
+                        @php
+                            $esFutura = $reserva->fecha > $hoy || ($reserva->fecha === $hoy && $reserva->hora_inicio > $ahora);
+                            $enCurso = $reserva->fecha === $hoy && $reserva->hora_inicio <= $ahora && $reserva->hora_fin > $ahora;
+                            $finalizada = $reserva->fecha < $hoy || ($reserva->fecha === $hoy && $reserva->hora_fin <= $ahora);
+                        @endphp
+
+                        @if ($esFutura)
+                            <form id="form-cancelar-{{ $reserva->id }}" method="POST" action="{{ route('mis-reservas.destroy', $reserva) }}">
+                                @csrf
+                                @method('DELETE')
+                                <label for="cancelar-modal" class="btn btn-xs md:btn-sm btn-error abrir-modal" data-id="{{ $reserva->id }}">
+                                    Cancelar
+                                </label>
+                            </form>
+                        @elseif ($enCurso)
+                            <span class="text-warning font-semibold">En curso</span>
+                        @elseif ($finalizada)
+                            <span class="text-success font-semibold">Finalizada</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div class="mt-6">
+        {{ $reservas->links('vendor.pagination.daisy') }}
     </div>
 @endif
 
@@ -169,7 +175,7 @@
 <input type="checkbox" id="cancelar-modal" class="modal-toggle" />
 <div class="modal">
     <div class="modal-box">
-        <h3 class="font-bold text-lg">¿Cancelar reserva?</h3>
+        <h3 class="font-bold text md">¿Cancelar reserva?</h3>
         <p class="py-4">¿Estás seguro de que deseas cancelar esta reserva?</p>
         <div class="modal-action">
             <label for="cancelar-modal" class="btn">No</label>
