@@ -26,10 +26,6 @@
                         Cerrar sesión
                     </button>
                 </li>
-                
-                <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                    @csrf
-                </form>
                 <li><span class="text-sm opacity-70 hidden md:inline">{{ Auth::user()->name }}</span></li>
             @else
             <li><a href="{{ route('login') }}" class="{{ $currentRoute === 'login' ? 'active font-semibold' : '' }}">Iniciar sesión</a></li>
@@ -38,7 +34,7 @@
         </ul>
     </div>
     
-    {{-- 🌗 Tema visible en móvil, centrado --}}
+    {{-- Tema --}}
     <div class="flex justify-center items-center gap-2">
         {{-- Sol --}}
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
@@ -56,9 +52,8 @@
         </svg>
     </div>
 
-    {{-- 🍔 Dropdown para móvil --}}
+    {{-- Menu hamburgesa para móvil --}}
     <div class="dropdown dropdown-end md:hidden">
-    {{-- <div class="dropdown dropdown-end"> --}}
         <label tabindex="0" class="btn btn-ghost btn-circle">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor">
@@ -81,14 +76,15 @@
                         Cerrar sesión
                     </button>
                 </li>
-
-                <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
-                    @csrf
-                </form>
             @else
                 <li><a href="{{ route('login') }}">Iniciar sesión</a></li>
                 <li><a href="{{ route('register') }}">Registrarse</a></li>
             @endauth
         </ul>
     </div>
+    
+    {{-- Form logout oculto --}}
+    <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
+        @csrf
+    </form>
 </nav>
