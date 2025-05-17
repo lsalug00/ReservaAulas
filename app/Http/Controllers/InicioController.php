@@ -44,12 +44,8 @@ class InicioController extends Controller
             $aulasQuery->where('planta', $request->input('planta'));
         }
 
-        if ($request->filled('capacidad_min')) {
-            $aulasQuery->where('capacidad', '>=', $request->capacidad_min);
-        }
-
-        if ($request->filled('capacidad_max')) {
-            $aulasQuery->where('capacidad', '<=', $request->capacidad_max);
+        if ($request->filled('capacidad')) {
+            $aulasQuery->where('capacidad', '>=', $request->capacidad);
         }
 
         $aulas = $aulasQuery->orderBy('codigo')->get();
@@ -116,8 +112,7 @@ class InicioController extends Controller
         $turnoOld = $request->input('turno', old('turno'));
         $categoriaOld = $request->input('categoria_id', old('categoria_id'));
         $incluirAmbosOld = $request->boolean('incluir_ambos', old('incluir_ambos'));
-        $capacidadMinOld = $request->input('capacidad_min', old('capacidad_min'));
-        $capacidadMaxOld = $request->input('capacidad_max', old('capacidad_max'));
+        $capacidadOld = $request->input('capacidad', old('capacidad'));
         $edificioOld = $request->input('edificio', old('edificio'));
         $plantaOld = $request->input('planta', old('planta'));
 
@@ -137,8 +132,7 @@ class InicioController extends Controller
             'categoriaOld',
             'turnoOld',
             'incluirAmbosOld',
-            'capacidadMinOld',
-            'capacidadMaxOld',
+            'capacidadOld',
             'edificioOld',
             'plantaOld'
         ));

@@ -3,151 +3,138 @@
 @section('title', 'Inicio')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">🔍 Buscar aula</h1>
+    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <h1 class="text-2xl font-bold mb-4">Buscar aula</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success mb-6 shadow-lg relative">
-            <span>{{ session('success') }}</span>
-            <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 close-alert">✕</button>
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-error mb-6 shadow-lg relative">
-            <div>
-                <p class="font-bold">Se encontraron errores:</p>
-                <ul class="text-sm mt-1 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+        @if (session('success'))
+            <div class="alert alert-success mb-6 shadow-lg relative">
+                <span>{{ session('success') }}</span>
+                <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 close-alert">✕</button>
             </div>
-            <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 close-alert">✕</button>
-        </div>
-    @endif
-    
-    <form method="POST" id="form-busqueda-aula" action="{{ route('index') }}" class="max-w-xl mb-6 space-y-4">
-        @csrf
-    
-        {{-- Categoría --}}
-        <div class="form-control">
-            <label class="label">Filtrar por categoría</label>
-            <select name="categoria_id" id="categoria_id" class="select select-bordered">
-                <option value="">Todas</option>
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}" {{ old('categoria_id', $categoriaOld) == $categoria->id ? 'selected' : '' }}>
-                        {{ ucfirst($categoria->nombre) }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-error mb-6 shadow-lg relative">
+                <div>
+                    <p class="font-bold">Se encontraron errores:</p>
+                    <ul class="text-sm mt-1 list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <button type="button" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 close-alert">✕</button>
+            </div>
+        @endif
         
-        {{-- Capacidad --}}
-        <label class="label">Capacidad (rango)</label>
-        <div class="flex gap-2">
-            <input
-                type="number"
-                name="capacidad_min"
-                id="capacidad_min"
-                class="input input-bordered w-1/2"
-                placeholder="Mín"
-                value="{{ old('capacidad_min',$capacidadMinOld) }}"
-                min="1"
-            >
-            <input
-                type="number"
-                name="capacidad_max"
-                id="capacidad_max"
-                class="input input-bordered w-1/2"
-                placeholder="Máx"
-                value="{{ old('capacidad_max',$capacidadMaxOld) }}"
-                min="1"
-            >
-        </div>
-    
-        {{-- Edificio --}}
-        <div class="form-control">
-            <label class="label">Filtrar por edificio</label>
-            <select name="edificio" id="edificio" class="select select-bordered">
-                <option value="">Todos</option>
-                @foreach ($edificios as $edificio)
-                    <option value="{{ $edificio }}" {{ old('edificio',$edificioOld) == $edificio ? 'selected' : '' }}>
-                        {{ $edificio }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    
-        {{-- Planta --}}
-        <div class="form-control">
-            <label class="label">Filtrar por planta</label>
-            <select name="planta" id="planta" class="select select-bordered">
-                <option value="">Todas</option>
-                @foreach ($plantas as $planta)
-                    <option value="{{ $planta }}" {{ old('planta',$plantaOld) == $planta ? 'selected' : '' }}>
-                        {{ $planta }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    
-        {{-- Aula --}}
-        <div class="form-control">
-            <label class="label">Selecciona un aula</label>
-            <select name="aula_id" id="aula_id" class="select select-bordered" required>
-                <option value="">Selecciona un aula</option>
-                @foreach ($aulas as $aula)
-                    <option
-                        value="{{ $aula->id }}"
-                        data-categoria="{{ $aula->categoria_id }}"
-                        data-edificio="{{ $aula->edificio }}"
-                        data-planta="{{ $aula->planta }}"
-                        data-capacidad="{{ $aula->capacidad }}"
-                        {{ old('aula_id', $aulaOld) == $aula->id ? 'selected' : '' }}
-                    >
-                        {{ $aula->codigo }} - {{ $aula->nombre }}
-                    </option>
-                @endforeach
-            </select>
-            <p id="mensaje-sin-aulas" class="text-sm text-error mt-1 hidden">
-            </p>
-        </div>        
-    
-        {{-- Turno --}}
-        <div class="form-control">
-            <label class="label">Filtrar por turno</label>
-            <select name="turno" class="select select-bordered">
-                <option value="">Todos</option>
-                <option value="mañana" {{ old('turno',$turnoOld) == 'mañana' ? 'selected' : '' }}>Mañana</option>
-                <option value="tarde" {{ old('turno',$turnoOld) == 'tarde' ? 'selected' : '' }}>Tarde</option>
-            </select>
-        </div>
-    
-        {{-- Incluir franjas "ambos" --}}
-        <div class="form-control">
-            <label class="cursor-pointer label">
-                <span class="label-text">Mostrar franjas de ambos turnos</span>
-                <input type="checkbox" name="incluir_ambos" class="checkbox" {{ old('incluir_ambos',$incluirAmbosOld) ? 'checked' : '' }}>
-            </label>
-        </div>
-    
-        {{-- Botón --}}
-        <div>
-            <button class="btn btn-primary w-full" id="boton-buscar">Buscar</button>
-        </div>
-    </form>
+        <form method="POST" id="form-busqueda-aula" action="{{ route('index') }}" class="space-y-6">
+            @csrf
+        
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {{-- Categoría --}}
+                <div class="form-control">
+                    <label class="label">Categoría</label>
+                    <select name="categoria_id" id="categoria_id" class="select select-bordered w-full">
+                        <option value="">Todas</option>
+                        @foreach ($categorias as $categoria)
+                            <option value="{{ $categoria->id }}" {{ old('categoria_id', $categoriaOld) == $categoria->id ? 'selected' : '' }}>
+                                {{ ucfirst($categoria->nombre) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                {{-- Capacidad mínima --}}
+                <div class="form-control">
+                    <label class="label">Capacidad mínima</label>
+                    <input type="number" id="capacidad" name="capacidad" class="input input-bordered w-full"
+                        value="{{ old('capacidad', $capacidadOld) }}" placeholder="Ej: 20" min="1">
+                </div>
+            
+                {{-- Edificio --}}
+                <div class="form-control">
+                    <label class="label">Edificio</label>
+                    <select name="edificio" id="edificio" class="select select-bordered w-full">
+                        <option value="">Todos</option>
+                        @foreach ($edificios as $edificio)
+                            <option value="{{ $edificio }}" {{ old('edificio',$edificioOld) == $edificio ? 'selected' : '' }}>
+                                {{ $edificio }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            
+                {{-- Planta --}}
+                <div class="form-control">
+                    <label class="label">Planta</label>
+                    <select name="planta" id="planta" class="select select-bordered w-full">
+                        <option value="">Todas</option>
+                        @foreach ($plantas as $planta)
+                            <option value="{{ $planta }}" {{ old('planta',$plantaOld) == $planta ? 'selected' : '' }}>
+                                {{ $planta }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            
+                {{-- Aula --}}
+                <div class="form-control">
+                    <label class="label">Aula</label>
+                    <select name="aula_id" id="aula_id" class="select select-bordered w-full" required>
+                        <option value="">Selecciona un aula</option>
+                        @foreach ($aulas as $aula)
+                            <option
+                                value="{{ $aula->id }}"
+                                data-categoria="{{ $aula->categoria_id }}"
+                                data-edificio="{{ $aula->edificio }}"
+                                data-planta="{{ $aula->planta }}"
+                                data-capacidad="{{ $aula->capacidad }}"
+                                {{ old('aula_id', $aulaOld) == $aula->id ? 'selected' : '' }}
+                            >
+                                {{ $aula->codigo }} - {{ $aula->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <p id="mensaje-sin-aulas" class="text-sm text-error mt-1 hidden">
+                    </p>
+                </div>        
+            
+                {{-- Turno --}}
+                <div class="form-control">
+                    <label class="label">Turno</label>
+                    <select name="turno" class="select select-bordered w-full">
+                        <option value="">Todos</option>
+                        <option value="mañana" {{ old('turno',$turnoOld) == 'mañana' ? 'selected' : '' }}>Mañana</option>
+                        <option value="tarde" {{ old('turno',$turnoOld) == 'tarde' ? 'selected' : '' }}>Tarde</option>
+                    </select>
+                </div>
+            
+                {{-- Incluir franjas "ambos" --}}
+                <div class="flex flex-col justify-end h-full">
+                    <label class="cursor-pointer flex items-center gap-2 ">
+                        <input type="checkbox" name="incluir_ambos" class="checkbox" {{ old('incluir_ambos', $incluirAmbosOld) ? 'checked' : '' }}>
+                        <span class="text-base-content/60">Mostrar franjas de ambos turnos</span>
+                    </label>
+                </div>
+
+                {{-- Botón --}}
+                <div class="flex items-end h-full">
+                    <button class="btn btn-primary w-full" id="boton-buscar">Buscar</button>
+                </div>
+            </div>
+        </form>
 
     @isset($aulaSeleccionada)
-        <h2 class="text-xl font-semibold mt-6 mb-2">🗓️ Horario semanal de {{ $aulaSeleccionada->nombre }}</h2>
+        <h2 class="text-xl font-semibold mt-6 mb-2">Horario semanal de {{ $aulaSeleccionada->nombre }}</h2>
 
         <p class="mb-4 text-sm text-gray-600">
             <span class="font-medium">Tipo:</span> {{ ucfirst($aulaSeleccionada->categoria->nombre ?? 'Sin categoría') }} —
             <span class="font-medium">Capacidad:</span> {{ $aulaSeleccionada->capacidad }} personas —
-            <span class="font-medium">🏢 Edificio:</span> {{ $aulaSeleccionada->edificio }} — 
-            <span class="font-medium">🏬 Planta:</span> {{ $aulaSeleccionada->planta }}
+            <span class="font-medium">Edificio:</span> {{ $aulaSeleccionada->edificio }} — 
+            <span class="font-medium">Planta:</span> {{ $aulaSeleccionada->planta }}
         </p>
 
-        <div class="overflow-x-auto mt-4">
+        <div class="hidden md:block mt-4">
             @php
                 $semanas = [];
                 $diasES = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
@@ -334,13 +321,107 @@
                 </div>
             @endforeach
         </div>
+
+        {{-- Horario en versión móvil con acordeones (solo visible en pantallas pequeñas) --}}
+        <div class="block md:hidden mt-6 space-y-4">
+            @foreach ($semanas as $semanaIndex => $dias)
+                <div class="collapse collapse-arrow bg-base-100 border border-base-300 rounded-lg">
+                    <input type="checkbox" name="semana" id="semana-{{ $semanaIndex }}" />
+                    <div class="collapse-title font-semibold text-base">
+                        Semana del {{ date('d/m', strtotime($dias[0]['fecha'])) }} al {{ date('d/m', strtotime(end($dias)['fecha'])) }}
+                    </div>
+
+                    <div class="collapse-content space-y-2">
+                        @foreach ($dias as $dia)
+                            <div class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-lg">
+                                <input type="checkbox" name="dia" id="dia-{{ $dia['fecha'] }}" />
+                                <div class="collapse-title flex justify-between items-center text-sm font-medium">
+                                    <span>{{ ucfirst($dia['nombre']) }} {{ date('d/m', strtotime($dia['fecha'])) }}</span>
+                                    @if ($dia['hoy'])
+                                        <span class="badge badge-accent text-xs">Hoy</span>
+                                    @endif
+                                </div>
+
+                                <div class="collapse-content">
+                                    @php
+                                        $noLectivo = $diasNoLectivos[$dia['fecha']] ?? null;
+                                    @endphp
+
+                                    @if ($noLectivo)
+                                        <div class="text-warning-content bg-warning p-2 rounded text-sm font-medium">
+                                            {{ $noLectivo->descripcion }}
+                                        </div>
+                                    @else
+                                        @foreach (['mañana', 'ambos', 'tarde'] as $turno)
+                                            @php
+                                                $franjas = $horariosAgrupados[$turno] ?? [];
+                                            @endphp
+
+                                            @if ($franjas->isNotEmpty())
+                                                <div class="mt-3">
+                                                    <div class="text-xs text-base-content/70 font-semibold uppercase mb-1">
+                                                        {{ ucfirst($turno) }}
+                                                    </div>
+
+                                                    @foreach ($franjas as $franja)
+                                                        @php
+                                                            $horaInicio = substr($franja->hora_inicio, 0, 5);
+                                                            $horaFin = substr($franja->hora_fin, 0, 5);
+                                                            $esRecreo = isset($recreos[$turno]) && $franja->id === $recreos[$turno]->id;
+
+                                                            $keyClase = $dia['nombre'] . '_' . $horaInicio;
+                                                            $clase = $horariosClase[$keyClase] ?? null;
+
+                                                            $reservasDelDia = $reservasSemana[$dia['fecha']] ?? collect();
+                                                            $reserva = $reservasDelDia->first(function ($res) use ($franja) {
+                                                                return $res->hora_inicio <= $franja->hora_inicio && $res->hora_fin >= $franja->hora_fin;
+                                                            });
+
+                                                            $bgClass = 'bg-base-100';
+                                                            if ($clase) {
+                                                                $bgClass = 'bg-primary text-primary-content';
+                                                            } elseif ($reserva) {
+                                                                $bgClass = 'bg-secondary text-secondary-content';
+                                                            } elseif ($esRecreo) {
+                                                                $bgClass = 'bg-base-300';
+                                                            }
+
+                                                            $userClase = $clase ? \App\Models\User::find($clase->user_id)?->codigo : null;
+                                                            $userReserva = $reserva ? \App\Models\User::find($reserva->user_id)?->codigo : null;
+                                                        @endphp
+
+                                                        <div class="border rounded p-2 mb-2 text-sm {{ $bgClass }}">
+                                                            <div class="flex justify-between">
+                                                                <span class="font-medium">{{ $horaInicio }} - {{ $horaFin }}</span>
+                                                                @if ($esRecreo)
+                                                                    <span class="italic text-xs">Recreo</span>
+                                                                @endif
+                                                            </div>
+                                                            @if ($userClase)
+                                                                <div class="mt-1">{{ $userClase }}</div>
+                                                            @elseif ($userReserva)
+                                                                <div class="mt-1">Reserva: {{ $userReserva }}</div>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
     @endisset
 
     @auth
         @if(auth()->user()->rol === 'profesor' && isset($aulaSeleccionada))
-            <h2 class="text-xl font-semibold mt-10 mb-2">📌 Realizar una reserva en esta aula</h2>
+            <h2 class="text-xl font-semibold mt-10 mb-2">Realizar una reserva en esta aula</h2>
 
-            <form method="POST" action="{{ route('reservas.store') }}" class="space-y-4 max-w-lg">
+            <form method="POST" action="{{ route('reservas.store') }}">
                 @csrf
 
                 {{-- Oculto el aula_id ya seleccionada y los datos de la busqueda --}}
@@ -348,74 +429,83 @@
                 <input type="hidden" name="categoria_id" value="{{ $categoriaOld }}">
                 <input type="hidden" name="turno" value="{{ $turnoOld }}">
                 <input type="hidden" name="incluir_ambos" value="{{ $incluirAmbosOld }}">
-                <input type="hidden" name="capacidad_min" value="{{ $capacidadMinOld }}">
-                <input type="hidden" name="capacidad_max" value="{{ $capacidadMaxOld }}">
+                <input type="hidden" name="capacidad" value="{{ $capacidadOld }}">
                 <input type="hidden" name="edificio" value="{{ $edificioOld }}">
                 <input type="hidden" name="planta" value="{{ $plantaOld }}">
 
-                {{-- Fecha --}}
-                @php
-                    $minFecha = $hoy;
-                    $maxFecha = date('Y-m-d', strtotime('friday this week', strtotime($fin_semana_2)));
-                @endphp
-                <div class="form-control">
-                    <label class="label">Fecha</label>
-                    <input
-                        type="date"
-                        name="fecha"
-                        class="input input-bordered"
-                        min="{{ $minFecha }}"
-                        max="{{ $maxFecha }}"
-                        required
-                        value="{{ old('fecha') }}"
-                    >
+                {{-- Mensaje error horas --}}
+                <div class="form-control col-span-full">
+                    <p id="mensaje-hora-error" class="text-sm text-error mt-1 hidden"></p>
                 </div>
 
-                {{-- Hora inicio --}}
-                <div class="form-control">
-                    <label class="label">Hora de inicio</label>
-                    <select id="hora_inicio" name="hora_inicio" class="select select-bordered" required>
-                        @foreach ($horarios as $h)
-                            @php $hora = date('H:i', strtotime($h->hora_inicio)); @endphp
-                            <option value="{{ $hora }}" {{ old('hora_inicio') == $hora ? 'selected' : '' }}>
-                                {{ $hora }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {{-- Fecha --}}
+                    <div class="form-control">
+                        <label class="label">Fecha</label>
+                        @php
+                            $minFecha = $hoy;
+                            $maxFecha = date('Y-m-d', strtotime('friday this week', strtotime($fin_semana_2)));
+                        @endphp
+                        <input
+                            type="date"
+                            name="fecha"
+                            class="input input-bordered w-full"
+                            min="{{ $minFecha }}"
+                            max="{{ $maxFecha }}"
+                            required
+                            value="{{ old('fecha') }}"
+                        >
+                    </div>
+
+                    {{-- Uso --}}
+                    <div class="form-control">
+                        <label class="label">Uso</label>
+                        <select name="uso" class="select select-bordered w-full" required>
+                            @foreach (['clase', 'examen', 'charla', 'taller', 'otro'] as $opcion)
+                                <option value="{{ $opcion }}" {{ old('uso') == $opcion ? 'selected' : '' }}>
+                                    {{ ucfirst($opcion) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Hora inicio --}}
+                    <div class="form-control">
+                        <label class="label">Hora de inicio</label>
+                        <select id="hora_inicio" name="hora_inicio" class="select select-bordered w-full" required>
+                            @foreach ($horarios as $h)
+                                @php $hora = date('H:i', strtotime($h->hora_inicio)); @endphp
+                                <option value="{{ $hora }}" {{ old('hora_inicio') == $hora ? 'selected' : '' }}>
+                                    {{ $hora }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Hora fin --}}
+                    <div class="form-control">
+                        <label class="label">Hora de fin</label>
+                        <select id="hora_fin" name="hora_fin" class="select select-bordered w-full" required>
+                            @foreach ($horarios as $h)
+                                @php $hora = date('H:i', strtotime($h->hora_fin)); @endphp
+                                <option value="{{ $hora }}" {{ old('hora_fin') == $hora ? 'selected' : '' }}>
+                                    {{ $hora }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Botón --}}
+                    <div class="flex items-end h-full">
+                        <button id="boton-reservar" class="btn btn-primary w-full">Reservar aula</button>
+                    </div>
                 </div>
-
-                {{-- Hora fin --}}
-                <div class="form-control">
-                    <label class="label">Hora de fin</label>
-                    <select id="hora_fin" name="hora_fin" class="select select-bordered" required>
-                        @foreach ($horarios as $h)
-                            @php $hora = date('H:i', strtotime($h->hora_fin)); @endphp
-                            <option value="{{ $hora }}" {{ old('hora_fin') == $hora ? 'selected' : '' }}>
-                                {{ $hora }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <p id="mensaje-hora-error" class="text-sm text-error mt-1 hidden">
-                </p>
-
-                {{-- Uso --}}
-                <div class="form-control">
-                    <label class="label">Uso</label>
-                    <select name="uso" class="select select-bordered" required>
-                        @foreach (['clase', 'examen', 'charla', 'taller', 'otro'] as $opcion)
-                            <option value="{{ $opcion }}" {{ old('uso') == $opcion ? 'selected' : '' }}>
-                                {{ ucfirst($opcion) }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <button class="btn btn-primary">Reservar aula</button>
             </form>
-        @endif
-    @endauth
+            @endif
+        @endauth
+    </div>
+            
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const todasLasAulas = @json($todasLasAulas);
@@ -423,14 +513,14 @@
             const aulaSelect = document.getElementById('aula_id');
             const edificioInput = document.getElementById('edificio');
             const plantaInput = document.getElementById('planta');
-            const capMinInput = document.getElementById('capacidad_min');
-            const capMaxInput = document.getElementById('capacidad_max');
+            const capacidadInput = document.getElementById('capacidad');
             const mensajeSinAulas = document.getElementById('mensaje-sin-aulas');
             const botonBuscar = document.getElementById('boton-buscar');
         
             const horaInicioInput = document.getElementById('hora_inicio');
             const horaFinInput = document.getElementById('hora_fin');
             const mensajeHoraError = document.getElementById('mensaje-hora-error');  // Aquí se muestra el mensaje de error de horas
+            const botonReservar = document.getElementById('boton-reservar');
 
             const aulaSeleccionada = "{{ old('aula_id', $aulaOld) }}";
         
@@ -438,8 +528,7 @@
                 const categoria = categoriaSelect.value;
                 const edificio = edificioInput?.value;
                 const planta = plantaInput?.value;
-                const capacidadMin = parseInt(capMinInput?.value) || 0;
-                const capacidadMax = parseInt(capMaxInput?.value) || Infinity;
+                const capacidadMin = parseInt(capacidadInput?.value);
 
                 // Limpiar el select de aulas
                 while (aulaSelect.firstChild) {
@@ -457,7 +546,7 @@
                     const coincideCategoria = !categoria || aula.categoria_id == categoria;
                     const coincideEdificio = !edificio || aula.edificio === edificio;
                     const coincidePlanta = !planta || aula.planta === planta;
-                    const coincideCapacidad = aula.capacidad >= capacidadMin && aula.capacidad <= capacidadMax;
+                    const coincideCapacidad = !capacidadMin || aula.capacidad >= capacidadMin;
                     return coincideCategoria && coincideEdificio && coincidePlanta && coincideCapacidad;
                 });
         
@@ -478,19 +567,6 @@
                     botonBuscar?.removeAttribute('disabled');
                 }
             }
-        
-            function validarRango() {
-                const min = parseInt(capMinInput.value);
-                const max = parseInt(capMaxInput.value);
-                if (!isNaN(min) && !isNaN(max) && max < min) {
-                    mensajeSinAulas?.classList.remove('hidden');
-                    mensajeSinAulas.textContent = 'La capacidad maxima tiene que ser mayor que la capacidad minima';
-                    botonBuscar?.setAttribute('disabled', 'disabled');
-                } else {
-                    mensajeSinAulas?.classList.add('hidden');
-                    botonBuscar?.removeAttribute('disabled');
-                }
-            }
 
             function validarHoras() {
                 const horaInicio = horaInicioInput.value;
@@ -505,23 +581,22 @@
                     // Mostrar mensaje de error
                     mensajeHoraError?.classList.remove('hidden');
                     mensajeHoraError.textContent = 'La hora de fin debe ser posterior a la hora de inicio.';
-                    botonBuscar?.setAttribute('disabled', 'disabled');
+                    botonReservar?.setAttribute('disabled', 'disabled');
                 } else {
                     // Si las horas son válidas, ocultar el mensaje de error
                     mensajeHoraError?.classList.add('hidden');
-                    botonBuscar?.removeAttribute('disabled');
+                    botonReservar?.removeAttribute('disabled');
                 }
             }
             
-            capMinInput?.addEventListener('input', validarRango);
-            capMaxInput?.addEventListener('input', validarRango);
+            capacidadInput?.addEventListener('input', filtrarAulas);
         
-            [categoriaSelect, edificioInput, plantaInput, capMinInput, capMaxInput].forEach(input => {
+            [categoriaSelect, edificioInput, plantaInput, capacidadInput].forEach(input => {
                 input?.addEventListener('change', filtrarAulas);
             });
 
-            horaInicioInput.addEventListener('change', validarHoras);
-            horaFinInput.addEventListener('change', validarHoras);
+            horaInicioInput?.addEventListener('change', validarHoras);
+            horaFinInput?.addEventListener('change', validarHoras);
         
             filtrarAulas(); // Ejecutar al cargar
 
