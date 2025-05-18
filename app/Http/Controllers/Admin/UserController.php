@@ -23,6 +23,10 @@ class UserController extends Controller
             $query->where('rol', $request->rol);
         }
 
+        if ($request->filled('active')) {
+            $query->where('active', $request->active);
+        }
+
         // Manejo de ordenamiento
         $orden = $request->input('orden', 'id');
         $direccion = $request->input('direccion', 'asc');
@@ -39,11 +43,13 @@ class UserController extends Controller
 
         $searchOld = $request->input('search', old('search'));
         $rolOld = $request->input('rol', old('rol'));
+        $activeOld = $request->input('active', old('active'));
 
         return view('admin.users.index', compact(
             'users',
             'searchOld',
-            'rolOld'
+            'rolOld',
+            'activeOld'
         ));
     }
 
