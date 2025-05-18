@@ -326,7 +326,7 @@
         <div class="block md:hidden mt-6 space-y-4">
             @foreach ($semanas as $semanaIndex => $dias)
                 <div class="collapse collapse-arrow bg-base-100 border border-base-300 rounded-lg">
-                    <input type="checkbox" name="semana" id="semana-{{ $semanaIndex }}" />
+                    <input type="radio" name="semana" id="semana-{{ $semanaIndex }}" />
                     <div class="collapse-title font-semibold text-base">
                         Semana del {{ date('d/m', strtotime($dias[0]['fecha'])) }} al {{ date('d/m', strtotime(end($dias)['fecha'])) }}
                     </div>
@@ -334,7 +334,7 @@
                     <div class="collapse-content space-y-2">
                         @foreach ($dias as $dia)
                             <div class="collapse collapse-arrow bg-base-200 border border-base-300 rounded-lg">
-                                <input type="checkbox" name="dia" id="dia-{{ $dia['fecha'] }}" />
+                                <input type="radio" name="dia" id="dia-{{ $dia['fecha'] }}" />
                                 <div class="collapse-title flex justify-between items-center text-sm font-medium">
                                     <span>{{ ucfirst($dia['nombre']) }} {{ date('d/m', strtotime($dia['fecha'])) }}</span>
                                     @if ($dia['hoy'])
