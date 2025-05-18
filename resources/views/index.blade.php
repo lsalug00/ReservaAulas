@@ -3,7 +3,7 @@
 @section('title', 'Inicio')
 
 @section('content')
-    <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <div class="max-w-8xl mx-auto px-4 md:px-6 lg:px-8 py-6 space-y-6">
         <h1 class="text-2xl font-bold mb-4">Buscar aula</h1>
 
         @if (session('success'))
