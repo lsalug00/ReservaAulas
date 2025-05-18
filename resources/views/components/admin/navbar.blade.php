@@ -2,7 +2,7 @@
     $currentRoute = Route::currentRouteName();
 @endphp
 
-<nav class="navbar bg-base-100 shadow mb-6 px-4">
+<nav class="navbar bg-base-100 shadow md:mb-6 px-2 md:px-4">
     {{-- Logo --}}
     <div class="flex-1">
         <a href="{{ route('admin.dashboard') }}" class="btn btn-ghost text-xl">Panel de Administración</a>
