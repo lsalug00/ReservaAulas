@@ -6,6 +6,8 @@
 
 <form method="POST" action="{{ route('perfil') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     @csrf
+    <input type="hidden" name="orden" value="{{ request('orden') }}">
+    <input type="hidden" name="direccion" value="{{ request('direccion', 'asc') }}">
 
     {{-- Fecha desde --}}
     <div class="form-control">
@@ -83,9 +85,15 @@
         </select>
     </div>
 
-    {{-- Botón --}}
-    <div class="flex justify-end items-end">
-        <button type="submit" class="btn btn-primary w-full">Filtrar</button>
+    {{-- Botones de acción --}}
+    <div class="flex flex-col sm:flex-row sm:justify-end items-stretch sm:items-end gap-2 col-span-1 sm:col-span-2 lg:col-span-4">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">Filtrar</button>
+
+        <a href="{{ route('perfil', ['orden' => request('orden'), 'direccion' => request('direccion')]) }}"
+           class="btn btn-outline w-full sm:w-auto">Limpiar filtros</a>
+
+        <a href="{{ route('perfil', request()->except(['orden', 'direccion'])) }}"
+           class="btn btn-outline w-full sm:w-auto">Limpiar orden</a>
     </div>
 </form>
 
@@ -117,7 +125,7 @@
                 <th class="md:hidden"><a href="{{ route('perfil', ordenarPor('hora_inicio')) }}">Horario {!! iconoOrdenSvg('hora_inicio') !!}</a></th> {{-- Solo visible en móvil --}}
                 <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('hora_inicio')) }}">Inicio {!! iconoOrdenSvg('hora_inicio') !!}</a></th>
                 <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('hora_fin')) }}">Fin {!! iconoOrdenSvg('hora_fin') !!}</a></th>
-                <th><a href="{{ route('perfil', ordenarPor('uso')) }}">Uso {!! iconoOrdenSvg('uso') !!}</a></th>
+                <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('uso')) }}">Uso {!! iconoOrdenSvg('uso') !!}</a></th>
                 <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('aula')) }}">Aula {!! iconoOrdenSvg('aula') !!}</a></th>
                 <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('edificio')) }}">Edificio {!! iconoOrdenSvg('edificio') !!}</a></th>
                 <th class="hidden md:table-cell"><a href="{{ route('perfil', ordenarPor('planta')) }}">Planta {!! iconoOrdenSvg('planta') !!}</a></th>
@@ -136,7 +144,7 @@
                     <td class="hidden md:table-cell">{{ substr($reserva->hora_inicio, 0, 5) }}</td>
                     <td class="hidden md:table-cell">{{ substr($reserva->hora_fin, 0, 5) }}</td>
 
-                    <td>{{ ucfirst($reserva->uso) }}</td>
+                    <td class="hidden md:table-cell">{{ ucfirst($reserva->uso) }}</td>
                     <td class="hidden md:table-cell">{{ $reserva->aula->codigo }} - {{ $reserva->aula->nombre }}</td>
                     <td class="hidden md:table-cell">{{ $reserva->aula->edificio }}</td>
                     <td class="hidden md:table-cell">{{ $reserva->aula->planta }}</td>

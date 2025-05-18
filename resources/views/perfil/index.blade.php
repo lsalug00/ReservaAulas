@@ -6,7 +6,7 @@
 <div class="min-h-screen flex flex-col justify-center items-center px-4 py-8">
     <h1 class="text-2xl font-bold mb-6">Mi perfil</h1>
 
-    <div class="card bg-base-100 shadow-md w-full max-w-4xl px-4 sm:px-6 md:px-8 mb-8">
+    <div class="card bg-base-100 shadow-md w-full max-w-8xl px-4 sm:px-6 md:px-8 mb-8">
         <div class="card-body space-y-6">
             <div class="flex flex-col md:flex-row md:flex-wrap md:gap-x-8 md:gap-y-6">
                 <!-- Nombre -->
