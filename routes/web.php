@@ -60,6 +60,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/', [AulaController::class, 'index'])->name('index');
         Route::post('/categoria', [AulaController::class, 'storeCategoria'])->name('categoria.store');
         Route::post('/', [AulaController::class, 'store'])->name('store');
+        Route::match(['get', 'post'], '/manage', [AulaController::class, 'manage'])->name('manage');
+        Route::get('/{aula}/edit', [AulaController::class, 'edit'])->name('edit');
+        Route::put('/{aula}', [AulaController::class, 'update'])->name('update');
+        Route::delete('/{aula}', [AulaController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('horarios')->name('horarios.')->group(function () {

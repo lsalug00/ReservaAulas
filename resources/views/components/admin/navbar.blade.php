@@ -38,11 +38,12 @@
             <li>
                 {{-- Dropdown Aulas y Horarios --}}
                 <div class="dropdown dropdown-end">
-                    <label tabindex="0" class="cursor-pointer {{ in_array($currentRoute, ['admin.aulas.index', 'admin.horarios.index']) ? 'active font-bold' : '' }}">
+                    <label tabindex="0" class="cursor-pointer {{ in_array($currentRoute, ['admin.aulas.index', 'admin.aulas.manage', 'admin.horarios.index']) ? 'active font-bold' : '' }}">
                         Aulas y Horarios
                     </label>
                     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-52">
                         <li><a href="{{ route('admin.aulas.index') }}" class="{{ $currentRoute === 'admin.aulas.index' ? 'active font-bold' : '' }}">Creación de aulas</a></li>
+                        <li><a href="{{ route('admin.aulas.manage') }}" class="{{ $currentRoute === 'admin.aulas.manage' ? 'active font-bold' : '' }}">Gestión de aulas</a></li>
                         <li><a href="{{ route('admin.horarios.index') }}" class="{{ $currentRoute === 'admin.horarios.index' ? 'active font-bold' : '' }}">Franjas horarias</a></li>
                     </ul>
                 </div>
@@ -104,6 +105,7 @@
             <li><a href="{{ route('admin.horarios-clase.form') }}">Importar horarios de clase</a></li>
             <li><a href="{{ route('admin.dias-no-lectivos.form') }}">Importar días no lectivos</a></li>
             <li><a href="{{ route('admin.aulas.index') }}">Creación de aulas</a></li>
+            <li><a href="{{ route('admin.aulas.manage') }}">Gestión de aulas</a></li>
             <li><a href="{{ route('admin.horarios.index') }}">Franjas horarias</a></li>
             <li><a href="{{ route('index') }}">Volver</a></li>
             <li>
