@@ -125,6 +125,16 @@
         </form>
 
     @isset($aulaSeleccionada)
+        @php
+            $coloresReservas = [
+                'clase'   => 'bg-success text-neutral-content',
+                'examen'  => 'bg-error text-neutral-content',
+                'charla'  => 'bg-info text-neutral-content',
+                'taller'  => 'bg-secondary text-neutral-content',
+                'otro'    => 'bg-neutral text-neutral-content',
+            ];
+        @endphp
+
         <h2 class="text-xl font-semibold mt-6 mb-2">Horario semanal de {{ $aulaSeleccionada->nombre }}</h2>
 
         <p class="mb-4 text-sm text-gray-600">
@@ -133,6 +143,26 @@
             <span class="font-medium">Edificio:</span> {{ $aulaSeleccionada->edificio }} — 
             <span class="font-medium">Planta:</span> {{ $aulaSeleccionada->planta }}
         </p>
+
+        <div class="mt-4 mb-2">
+            <h3 class="text-sm font-semibold mb-2">Leyenda:</h3>
+            <div class="flex flex-wrap gap-2 text-sm">
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-primary rounded-sm border border-base-content"></div> Clase regular
+                </div>
+                @foreach ($coloresReservas as $tipo => $colorClass)
+                    <div class="flex items-center gap-1">
+                        <div class="w-4 h-4 {{ $colorClass }} rounded-sm border border-base-content"></div> {{ ucfirst($tipo) }}
+                    </div>
+                @endforeach
+                <div class="flex items-center gap-1">
+                    <div class="w-4 h-4 bg-warning rounded-sm border border-base-content"></div> Día no lectivo
+                </div>
+                <div class="hidden md:flex items-center gap-1">
+                    <div class="w-4 h-4 bg-accent rounded-sm border border-base-content"></div> Día actual
+                </div>
+            </div>
+        </div>
 
         <div class="hidden md:block mt-4">
             @php
@@ -297,7 +327,11 @@
                                                                     {{ \App\Models\User::find($clase->user_id)?->codigo ?? '—' }}
                                                                 </td>
                                                             @elseif ($reserva && $rowspanReserva > 0)
-                                                                <td rowspan="{{ $rowspanReserva }}" class="text-center align-middle bg-secondary text-secondary-content text-sm font-medium w-[16%]">
+                                                                @php
+                                                                    $tipo = strtolower($reserva->uso ?? 'otro');
+                                                                    $claseColor = $coloresReservas[$tipo] ?? 'bg-gray-400 text-white';
+                                                                @endphp
+                                                                <td rowspan="{{ $rowspanReserva }}" class="text-center align-middle {{ $claseColor }} text-sm font-medium w-[16%]">
                                                                     {{ \App\Models\User::find($reserva->user_id)?->codigo ?? '—' }}
                                                                 </td>
                                                             @else
@@ -381,7 +415,8 @@
                                                             if ($clase) {
                                                                 $bgClass = 'bg-primary text-primary-content';
                                                             } elseif ($reserva) {
-                                                                $bgClass = 'bg-secondary text-secondary-content';
+                                                                $tipo = strtolower($reserva->uso ?? 'otro');
+                                                                $bgClass = $coloresReservas[$tipo] ?? 'bg-gray-400 text-white';
                                                             } elseif ($esRecreo) {
                                                                 $bgClass = 'bg-base-300';
                                                             }
