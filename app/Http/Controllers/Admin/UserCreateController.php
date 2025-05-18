@@ -72,13 +72,33 @@ class UserCreateController extends Controller
             $apellido = trim($row['C'] ?? '');
             $email = strtolower(trim($row['D'] ?? ''));
 
-            if (empty($codigo) || empty($nombre) || empty($apellido) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errorMessages = [];
+
+            if (empty($codigo)) {
+                $errorMessages[] = 'Código vacío';
+            }
+            if (empty($nombre)) {
+                $errorMessages[] = 'Nombre vacío';
+            }
+            if (empty($apellido)) {
+                $errorMessages[] = 'Apellido vacío';
+            }
+            if (empty($email)) {
+                $errorMessages[] = 'Email vacío';
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errorMessages[] = 'Email no válido';
+            }
+
+            $exists = User::where('email', $email)->exists();
+
+            if (count($errorMessages) > 0) {
                 $preview[] = [
                     'name' => $nombre,
                     'surname' => $apellido,
                     'email' => $email,
                     'valid' => false,
-                    'error' => 'Faltan datos o email no válido'
+                    'error' => implode(', ', $errorMessages),
+                    'exists' => false,
                 ];
                 continue;
             }
@@ -88,7 +108,8 @@ class UserCreateController extends Controller
                 'name' => mb_convert_case(mb_strtolower($nombre, 'UTF-8'), MB_CASE_TITLE, "UTF-8"),
                 'surname' => mb_convert_case(mb_strtolower($apellido, 'UTF-8'), MB_CASE_TITLE, "UTF-8"),
                 'email' => $email,
-                'valid' => true
+                'valid' => true,
+                'exists' => $exists,
             ];
         }
 
@@ -107,8 +128,10 @@ class UserCreateController extends Controller
         fwrite($csv, chr(0xEF) . chr(0xBB) . chr(0xBF));
         fputcsv($csv, ['Nombre', 'Apellidos', 'Email', 'Contraseña'], ';');
 
+        $guardados = 0;
+        
         foreach ($preview as $item) {
-            if (!$item['valid']) continue;
+            if (!$item['valid'] || ($item['exists'] ?? false)) continue;
 
             $clave = "_%&" . bin2hex(random_bytes(4)) . "&%_";
 
@@ -126,11 +149,15 @@ class UserCreateController extends Controller
             );
 
             fputcsv($csv, [$item['name'], $item['surname'], $item['email'], $clave], ';');
+
+            $guardados++;
         }
 
         fclose($csv);
 
-        return redirect()->route('admin.users.create')->with('success', 'Usuarios guardados correctamente.');
+        return redirect()
+            ->route('admin.users.create')
+            ->with('success', "Se guardaron {$guardados} usuario(s) correctamente.");
     }
 
     public function downloadCsv()
