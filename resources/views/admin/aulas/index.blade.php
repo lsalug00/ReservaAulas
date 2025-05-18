@@ -3,7 +3,7 @@
 @section('title', 'Creacion de Aulas')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-8 space-y-10">
+<div class="max-w-4xl mx-auto py-8 space-y-10 px-4">
     <h1 class="text-2xl font-bold">Creacion de Aulas y Categorías</h1>
 
     @if(session('mensaje'))
@@ -14,9 +14,9 @@
     <form action="{{ route('admin.aulas.categoria.store') }}" method="POST" class="space-y-4">
         @csrf
         <h2 class="text-lg font-semibold">Nueva Categoría</h2>
-        <div class="flex gap-2">
+        <div class="flex flex-col sm:flex-row gap-2">
             <input type="text" name="nombre" placeholder="Nombre de la categoría" class="input input-bordered w-full" required>
-            <button class="btn btn-primary">Crear</button>
+            <button class="btn btn-primary w-full sm:w-auto">Crear</button>
         </div>
     </form>
 
@@ -25,7 +25,7 @@
         @csrf
         <h2 class="text-lg font-semibold">Nueva Aula</h2>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <input name="codigo" type="text" placeholder="Código" class="input input-bordered w-full" required>
             <input name="nombre" type="text" placeholder="Nombre del aula" class="input input-bordered w-full" required>
             <input name="capacidad" type="number" placeholder="Capacidad" class="input input-bordered w-full" required min="1">
@@ -38,7 +38,10 @@
             <input name="edificio" type="text" placeholder="Edificio" class="input input-bordered w-full" required>
             <input name="planta" type="text" placeholder="Planta" class="input input-bordered w-full" required>
         </div>
-        <button class="btn btn-success mt-2">Guardar Aula</button>
+
+        <div class="flex justify-end">
+            <button class="btn btn-success w-full sm:w-auto mt-2">Guardar Aula</button>
+        </div>
     </form>
 </div>
 @endsection
