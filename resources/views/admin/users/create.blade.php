@@ -5,12 +5,12 @@
 
     {{-- Alerta post-creación con enlace de descarga --}}
     @if (session('success'))
-    <div class="alert alert-success shadow-lg">
-        <div>
-            <span>{{ session('success') }}</span>
-            <a href="{{ route('admin.users.create.download') }}" class="link link-primary ml-2" download>Descargar CSV con claves</a>
+        <div class="alert alert-success shadow-lg">
+            <div>
+                <span>{{ session('success') }}</span>
+                <a href="{{ route('admin.users.create.download') }}" class="link link-primary ml-2" download>Descargar CSV con claves</a>
+            </div>
         </div>
-    </div>
     @endif
 
     @if (!isset($preview))

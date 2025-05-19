@@ -2,6 +2,8 @@
 
 @section('title', __('Login'))
 
+@section('page-id', 'login')
+
 @section('content')
     <div class="max-w-md mx-auto">
         <h1 class="text-2xl font-bold mb-6">🔐 {{ __('Login') }}</h1>
@@ -60,19 +62,4 @@
             </div>
         </form>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const input = document.getElementById('password');
-            const eyeOpen = document.getElementById('eyeOpen');
-            const eyeClosed = document.getElementById('eyeClosed');
-            const toggleBtn = document.getElementById('togglePassword');
-        
-            toggleBtn.addEventListener('click', () => {
-                const isHidden = input.type === 'password';
-                input.type = isHidden ? 'text' : 'password';
-                eyeOpen.classList.toggle('hidden', isHidden);
-                eyeClosed.classList.toggle('hidden', !isHidden);
-            });
-        });
-    </script>
 @endsection

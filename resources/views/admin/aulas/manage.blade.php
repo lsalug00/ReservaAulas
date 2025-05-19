@@ -2,12 +2,14 @@
 
 @section('title', 'Gestion de Aulas')
 
+@section('page-id', 'aulas')
+
 @section('content')
 <div class="max-w-7xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">Gestión de Aulas Existentes</h1>
 
     @if(session('mensaje'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+        <div class="alert alert-success">
             {{ session('mensaje') }}
         </div>
     @endif
@@ -130,8 +132,9 @@
                             <a href="{{ route('admin.aulas.edit', $aula) }}" class="btn btn-sm btn-info">Editar</a>
                             <!-- Botón para abrir modal -->
                             <button 
-                                class="btn btn-sm btn-error" 
-                                onclick="openDeleteModal({{ $aula->id }}, '{{ $aula->nombre }}')"
+                                class="btn btn-sm btn-error btn-eliminar" 
+                                data-id="{{ $aula->id }}"
+                                data-nombre="{{ $aula->nombre }}"
                                 type="button"
                             >
                                 Eliminar
@@ -162,32 +165,10 @@
             <h3 class="font-bold text-lg">Confirmar eliminación</h3>
             <p class="py-4">¿Seguro que quieres eliminar el aula <span id="modal-aula-nombre" class="font-semibold"></span>?</p>
             <div class="modal-action">
-            <button type="button" class="btn" onclick="closeDeleteModal()">Cancelar</button>
-            <button type="button" class="btn btn-error" onclick="submitDeleteForm()">Eliminar</button>
+            <button type="button" class="btn" id="btn-cancelar">Cancelar</button>
+            <button type="button" class="btn btn-error" id="btn-eliminar-confirmar">Eliminar</button>
             </div>
         </div>
     </div>
 </div>
-    <script>
-        let aulaIdToDelete = null;
-
-        function openDeleteModal(id, nombre) {
-            aulaIdToDelete = id;
-            document.getElementById('modal-aula-nombre').textContent = nombre;
-            const modal = document.getElementById('delete-modal');
-            modal.classList.add('modal-open');
-        }
-
-        function closeDeleteModal() {
-            aulaIdToDelete = null;
-            const modal = document.getElementById('delete-modal');
-            modal.classList.remove('modal-open');
-        }
-
-        function submitDeleteForm() {
-            if (!aulaIdToDelete) return;
-            const form = document.getElementById(`delete-form-${aulaIdToDelete}`);
-            if (form) form.submit();
-        }
-    </script>
 @endsection

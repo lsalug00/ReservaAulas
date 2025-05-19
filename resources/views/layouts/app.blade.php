@@ -16,26 +16,12 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-base-200 text-base-content">
+<body data-page="@yield('page-id')" class="min-h-screen bg-base-200 text-base-content">
     @include('components.navbar')
 
     <div class="container mx-auto p-4">
         @yield('content')
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggle = document.getElementById('themeToggle');
-            const theme = localStorage.getItem('theme') || 'light';
-    
-            document.documentElement.setAttribute('data-theme', theme);
-            if (toggle) toggle.checked = theme === 'dark';
-    
-            toggle?.addEventListener('change', function () {
-                const newTheme = this.checked ? 'dark' : 'light';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-            });
-        });
-    </script>
+    @stack('scripts')
 </body>
 </html>
