@@ -393,7 +393,7 @@
                                                 $franjas = $horariosAgrupados[$turno] ?? [];
                                             @endphp
 
-                                            @if ($franjas->isNotEmpty())
+                                            @if (!empty($franjas))
                                                 <div class="mt-3">
                                                     <div class="text-xs text-base-content/70 font-semibold uppercase mb-1">
                                                         {{ ucfirst($turno) }}
