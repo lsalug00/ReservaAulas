@@ -78,7 +78,7 @@ class LoginController extends Controller
     {
         // Si debe cambiar la contraseña, redirigir directamente
         if ($user->pw_update) {
-            return redirect()->route('password.edit')
+            return redirect()->route('pass.edit')
                 ->with('error', 'Debes cambiar tu contraseña antes de continuar.');
         }
 

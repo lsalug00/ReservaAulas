@@ -326,7 +326,7 @@
                                                         {{-- Mostrar contenido normal --}}
                                                             @if ($clase)
                                                                 <td class="text-center align-middle bg-primary text-primary-content text-sm font-medium w-[16%]">
-                                                                    {{ \App\Models\User::find($clase->user_id)?->codigo ?? '—' }}
+                                                                    {{ \App\Models\User::find($clase->user_id)?->name ?? '—' }}
                                                                 </td>
                                                             @elseif ($reserva && $rowspanReserva > 0)
                                                                 @php
@@ -334,7 +334,7 @@
                                                                     $claseColor = $coloresReservas[$tipo] ?? 'bg-gray-400 text-white';
                                                                 @endphp
                                                                 <td rowspan="{{ $rowspanReserva }}" class="text-center align-middle {{ $claseColor }} text-sm font-medium w-[16%]">
-                                                                    {{ \App\Models\User::find($reserva->user_id)?->codigo ?? '—' }}
+                                                                    {{ \App\Models\User::find($reserva->user_id)?->name ?? '—' }}
                                                                 </td>
                                                             @else
                                                                 {{-- Celda sin clase --}}
@@ -423,8 +423,8 @@
                                                                 $bgClass = 'bg-base-300';
                                                             }
 
-                                                            $userClase = $clase ? \App\Models\User::find($clase->user_id)?->codigo : null;
-                                                            $userReserva = $reserva ? \App\Models\User::find($reserva->user_id)?->codigo : null;
+                                                            $userClase = $clase ? \App\Models\User::find($clase->user_id)?->name : null;
+                                                            $userReserva = $reserva ? \App\Models\User::find($reserva->user_id)?->name : null;
                                                         @endphp
 
                                                         <div class="border rounded p-2 mb-2 text-sm {{ $bgClass }}">
@@ -437,7 +437,7 @@
                                                             @if ($userClase)
                                                                 <div class="mt-1">{{ $userClase }}</div>
                                                             @elseif ($userReserva)
-                                                                <div class="mt-1">Reserva: {{ $userReserva }}</div>
+                                                                <div class="mt-1">{{ $userReserva }}</div>
                                                             @endif
                                                         </div>
                                                     @endforeach
