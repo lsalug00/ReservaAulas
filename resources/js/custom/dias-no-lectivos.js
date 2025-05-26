@@ -1,5 +1,5 @@
 const eventos = window.eventosData || [];
-const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+const diasSemana = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
 const fechaInicio = new Date(window.fechaInicio);// septiembre
 const fechaFin = new Date(window.fechaFin);// junio siguiente

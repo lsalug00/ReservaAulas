@@ -26,7 +26,7 @@ class UserCreateController extends Controller
         fputcsv($csv, ['Nombre', 'Apellidos', 'Email', 'Contraseña'], ';');
 
         $validated = $request->validate([
-            'codigo' => 'required|string',
+            'codigo' => 'required|string|regex:/^[A-Z]{2}[0-9]{2}$/',
             'name' => 'required|string',
             'surname' => 'required|string',
             'email' => 'required|email|unique:users,email',

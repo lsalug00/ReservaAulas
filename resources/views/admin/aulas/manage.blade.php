@@ -14,8 +14,10 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.aulas.manage') }}" id="filtroForm" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <form method="POST" action="{{ route('admin.aulas.manage') }}" id="filtroForm"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 w-full">
         @csrf
+
         <input type="hidden" name="orden" value="{{ request('orden') }}">
         <input type="hidden" name="direccion" value="{{ request('direccion', 'asc') }}">
 
@@ -26,9 +28,9 @@
                 value="{{ $request->input('capacidad')}}" placeholder="Ej: 20" min="1">
         </div>
 
-        {{-- Tipo de aula --}}
+        {{-- Categoría --}}
         <div class="form-control">
-            <label class="label">Tipo de aula</label>
+            <label class="label">Categoría</label>
             <select name="categoria_id" class="select select-bordered w-full">
                 <option value="">Todas</option>
                 @foreach($categorias as $categoria)
@@ -65,14 +67,15 @@
             </select>
         </div>
 
-        <div class="flex justify-end items-end gap-2 col-span-4">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
+        {{-- Acciones --}}
+        <div class="col-span-1 sm:col-span-2 lg:col-span-3 flex flex-wrap justify-end gap-2 items-end mt-2">
+            <button type="submit" class="btn btn-primary w-full sm:w-auto">Filtrar</button>
 
-            {{-- Botón para limpiar solo los filtros --}}
-            <a href="{{ route('admin.aulas.manage', ['orden' => request('orden'), 'direccion' => request('direccion')]) }}" class="btn btn-outline">Limpiar filtros</a>
+            <a href="{{ route('admin.aulas.manage', ['orden' => request('orden'), 'direccion' => request('direccion')]) }}"
+            class="btn btn-outline w-full sm:w-auto">Limpiar filtros</a>
 
-            {{-- Botón para limpiar solo el ordenamiento --}}
-            <a href="{{ route('admin.aulas.manage', request()->except(['orden', 'direccion'])) }}" class="btn btn-outline">Limpiar orden</a>
+            <a href="{{ route('admin.aulas.manage', request()->except(['orden', 'direccion'])) }}"
+            class="btn btn-outline w-full sm:w-auto">Limpiar orden</a>
         </div>
     </form>
 
@@ -128,7 +131,7 @@
                         <td class="hidden md:table-cell">{{ $aula->categoria->nombre ?? 'N/A' }}</td>
                         <td class="hidden md:table-cell">{{ $aula->edificio }}</td>
                         <td class="hidden md:table-cell">{{ $aula->planta }}</td>
-                        <td class="flex flex-col gap-1 sm:flex-row sm:gap-2">
+                        <td class="flex flex-col gap-1 md:flex-row md:gap-2">
                             <a href="{{ route('admin.aulas.edit', $aula) }}" class="btn btn-sm btn-info">Editar</a>
                             <!-- Botón para abrir modal -->
                             <button 

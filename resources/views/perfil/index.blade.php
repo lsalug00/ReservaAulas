@@ -63,9 +63,11 @@
                 </div>
                 
             </div>
-            <!-- Rol y cambiar contraseña abajo, full width -->
-            <p><span class="font-semibold">Rol:</span> {{ ucfirst($usuario->rol) }}</p>
-            <a href="{{ route('pass.edit') }}" class="btn btn-outline btn-sm mb-4">Cambiar contraseña</a>
+            <!-- Rol y botón en línea desde md -->
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4">
+                <p class="mb-0"><span class="font-semibold">Rol:</span> {{ ucfirst($usuario->rol) }}</p>
+                <a href="{{ route('pass.edit') }}" class="btn btn-outline btn-sm w-full md:w-auto">Cambiar contraseña</a>
+            </div>
         </div>
     </div>
 

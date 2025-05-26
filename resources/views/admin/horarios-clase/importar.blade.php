@@ -32,16 +32,5 @@
             </div>
         </div>
     </form>
-
-    @if(session('errores'))
-        <div class="alert alert-warning mt-4">
-            <h3 class="font-bold mb-2">Filas ignoradas:</h3>
-            <ul class="list-disc pl-5 space-y-1 text-sm">
-                @foreach (session('errores') as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 </div>
 @endsection

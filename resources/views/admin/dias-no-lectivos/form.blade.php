@@ -12,15 +12,21 @@
         <div class="alert alert-success">{{ session('mensaje') }}</div>
     @endif
 
-    <form action="{{ route('admin.dias-no-lectivos.import') }}" method="POST" enctype="multipart/form-data"
-          class="space-y-4 w-full sm:max-w-md">
-        @csrf
-        <div>
-            <label class="label">Archivo PDF del calendario escolar:</label>
-            <input type="file" name="pdf" accept=".pdf" class="file-input file-input-bordered w-full" required>
-        </div>
-        <button class="btn btn-primary" type="submit">Importar</button>
-    </form>
+    <div class="w-full flex justify-center">
+        <form action="{{ route('admin.dias-no-lectivos.import') }}" method="POST" enctype="multipart/form-data"
+            class="w-full max-w-sm sm:max-w-md md:max-w-lg bg-base-100 shadow-md rounded-xl p-4 space-y-4">
+            @csrf
+            
+            <div>
+                <label class="label font-semibold">Calendario escolar (PDF):</label>
+                <input type="file" name="pdf" accept=".pdf" class="file-input file-input-bordered w-full" required>
+            </div>
+
+            <div class="flex justify-end">
+                <button class="btn btn-primary w-full sm:w-auto" type="submit">Previsualización</button>
+            </div>
+        </form>
+    </div>
 
    @if(isset($eventos))
         <div class="mt-6 space-y-2">
@@ -33,7 +39,7 @@
                     <div class="w-4 h-4 rounded bg-success/80"></div> Añadido manualmente
                 </div>
                 <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 rounded bg-warning/80"></div> Fin de semana (no se guardará)
+                    <div class="w-4 h-4 rounded bg-warning/80"></div> Importado desde PDF que es fin de semana (no se guardará)
                 </div>
             </div>
         </div>

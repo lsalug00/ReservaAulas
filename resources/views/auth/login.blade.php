@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="max-w-md mx-auto">
-        <h1 class="text-2xl font-bold mb-6">🔐 {{ __('Login') }}</h1>
+        <h1 class="text-2xl font-bold mb-6">{{ __('Login') }}</h1>
 
         @if (session('error'))
             <div class="alert alert-error mb-4">

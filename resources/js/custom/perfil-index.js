@@ -10,12 +10,14 @@ const errorMsg = document.getElementById('correo-error');
 editarBtn.addEventListener('click', () => {
     emailActual.style.display = 'none';
     emailEdicion.classList.remove('hidden');
+    editarBtn.classList.add('hidden');
 });
 
 cancelarBtn.addEventListener('click', () => {
     emailEdicion.classList.add('hidden');
     emailActual.style.display = 'inline';
     errorMsg.classList.add('hidden');
+    editarBtn.classList.remove('hidden');
 });
 
 guardarBtn.addEventListener('click', () => {

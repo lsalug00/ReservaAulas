@@ -38,7 +38,7 @@
                     type="text" 
                     name="search" 
                     value="{{ old('search',$searchOld) }}" 
-                    placeholder="Buscar por nombre o email" 
+                    placeholder="Buscar por nombre, apellidos o email" 
                     class="input input-bordered w-full"
                 >
             </div>
@@ -60,14 +60,14 @@
             </div>
 
             <!-- Botones -->
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 w-full lg:flex lg:w-auto">
-                <button type="submit" class="btn btn-primary w-full sm:col-span-2 lg:w-auto">Filtrar</button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full lg:flex lg:w-auto">
+                <button type="submit" class="btn btn-primary w-full sm:col-span-1 lg:w-auto">Filtrar</button>
 
                 <a href="{{ route('admin.users.index', ['orden' => request('orden'), 'direccion' => request('direccion')]) }}"
-                    class="btn btn-outline w-full sm:col-span-1 lg:w-auto">Limpiar filtros</a>
+                    class="btn btn-outline w-full md:col-span-1 lg:w-auto">Limpiar filtros</a>
 
                 <a href="{{ route('admin.users.index', request()->except(['orden', 'direccion'])) }}"
-                    class="btn btn-outline w-full sm:col-span-1 lg:w-auto">Limpiar orden</a>
+                    class="hidden lg:btn lg:btn-outline lg:w-auto">Limpiar orden</a>
             </div>
         </div>
     </form>
@@ -106,7 +106,7 @@
                         <th><a href="{{ route('admin.users.index', ordenarPor('codigo')) }}">Código {!! iconoOrdenSvg('codigo') !!}</a></th>
                         <th><a href="{{ route('admin.users.index', ordenarPor('rol')) }}">Rol {!! iconoOrdenSvg('rol') !!}</a></th>
                         <th><a href="{{ route('admin.users.index', ordenarPor('active')) }}">Activo {!! iconoOrdenSvg('active') !!}</a></th>
-                        <th>Acciones</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

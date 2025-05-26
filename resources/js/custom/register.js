@@ -1,6 +1,7 @@
 // Expresiones regulares
 const regexNombre = /^(Mª|[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)(\s?(del|de|la|los)?\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*$/;
 const regexApellido = /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s(de((\s)(la|los))?|del\s)?\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*(?:\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?(?:-[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?$/;
+const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
 // Validación en tiempo real
 function validarInput(input, regex, min, max) {
@@ -14,10 +15,19 @@ function validarInput(input, regex, min, max) {
 
 const nombreInput = document.getElementById('name');
 const apellidoInput = document.getElementById('surname');
+const passwordInput = document.getElementById('password');
+const passwordConfirmInput = document.getElementById('password_confirmation');
 
-if (nombreInput && apellidoInput) {
+if (nombreInput && apellidoInput && passwordInput && passwordConfirmInput) {
     validarInput(nombreInput, regexNombre, 3, 20);
     validarInput(apellidoInput, regexApellido, 3, 50);
+    validarInput(passwordInput, regexPassword, 8, 255);
+
+    passwordConfirmInput.addEventListener('input', () => {
+        const coincide = passwordConfirmInput.value === passwordInput.value;
+        passwordConfirmInput.classList.toggle('input-error', !coincide);
+        passwordConfirmInput.classList.toggle('input-success', coincide);
+    });
 }
 
 // Mostrar/ocultar contraseña

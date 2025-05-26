@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="max-w-md mx-auto">
-        <h1 class="text-2xl font-bold mb-6">🔒 Cambiar contraseña</h1>
+        <h1 class="text-2xl font-bold mb-6">Cambiar contraseña</h1>
 
         @if (session('error'))
             <div class="alert alert-error shadow mb-4">

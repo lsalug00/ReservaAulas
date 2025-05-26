@@ -64,10 +64,18 @@ class RegisterController extends Controller
                 'regex:/^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s(de((\s)(la|los))?|del\s)?\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)*(?:\s[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?(?:-[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+)?$/'
             ],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/'
+            ],
         ], [
             'name.regex' => 'El nombre solo debe contener letras, empezar por mayúscula y tener una longitud de 3-20 caracteres.',
             'surname.regex' => 'El(Los) apellido(s) solo debe contener letras, empezar por mayúscula y tener una longitud de 3-20 caracteres.',
+            'password.regex' => 'La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo (!@#$%^&*).',
+            'password.confirmed' => 'La confirmación de la contraseña no coincide.'
         ]);
     }
 
@@ -84,6 +92,9 @@ class RegisterController extends Controller
             'surname' => $data['surname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'rol' => 'invitado',
+            'active' => true,
+            'pw_update' => false,
         ]);
     }
 }

@@ -115,7 +115,7 @@
                 <div class="flex flex-col justify-end h-full">
                     <label class="cursor-pointer flex items-center gap-2 ">
                         <input type="checkbox" name="incluir_ambos" class="checkbox" {{ old('incluir_ambos', $incluirAmbosOld) ? 'checked' : '' }}>
-                        <span class="text-base-content/60">Mostrar franjas de ambos turnos</span>
+                        <span class="text-base-content/60">Mostrar franjas intermedias</span>
                     </label>
                 </div>
 
@@ -232,8 +232,8 @@
                                     @foreach (['mañana', 'ambos', 'tarde'] as $turno)
                                         @if ($horariosAgrupados->has($turno))
                                             @php
-                                                $filas = $horariosAgrupados[$turno];
-                                                $mostrarTurno = $turno !== 'ambos';
+                                                $filas = $horariosAgrupados[$turno] ?? [];
+                                                $nombreTurno = $turno === 'ambos' ? 'Intermedio' : $turno;
                                             @endphp
 
                                             @foreach ($filas as $index => $franja)
@@ -249,13 +249,9 @@
                                                 @endphp
                                                 <tr class="{{ $alto }}">
                                                     {{-- Columna de Turno (solo en la primera fila de cada grupo y si no es "ambos") --}}
-                                                    @if ($mostrarTurno && $index === 0)
+                                                    @if ($index === 0)
                                                         <td class="bg-base-100 text-center font-semibold text-sm text-base-content/80 uppercase align-middle" rowspan="{{ $filas->count() }}">
-                                                            {{ ucfirst($turno) }}
-                                                        </td>
-                                                    @elseif ($mostrarTurno === false)
-                                                        <td class="bg-base-100" rowspan="{{ $filas->count() }}">
-                                                            
+                                                            {{ $nombreTurno }}
                                                         </td>
                                                     @endif
 
@@ -391,12 +387,13 @@
                                         @foreach (['mañana', 'ambos', 'tarde'] as $turno)
                                             @php
                                                 $franjas = $horariosAgrupados[$turno] ?? [];
+                                                $nombreTurno = $turno === 'ambos' ? 'Intermedio' : ucfirst($turno);
                                             @endphp
 
                                             @if (!empty($franjas))
                                                 <div class="mt-3">
                                                     <div class="text-xs text-base-content/70 font-semibold uppercase mb-1">
-                                                        {{ ucfirst($turno) }}
+                                                        {{ $nombreTurno }}
                                                     </div>
 
                                                     @foreach ($franjas as $franja)

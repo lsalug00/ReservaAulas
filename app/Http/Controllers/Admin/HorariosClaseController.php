@@ -86,6 +86,6 @@ class HorariosClaseController extends Controller
 
         return redirect()
             ->route('admin.horarios-clase.form')
-            ->with('mensaje', "✔ $insertadas clases importadas correctamente. Se eliminaron los horarios anteriores.");
+            ->with('mensaje', "$insertadas clases importadas correctamente. Se eliminaron los horarios anteriores.");
     }
 }

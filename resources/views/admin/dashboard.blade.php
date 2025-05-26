@@ -13,7 +13,7 @@
         <li>Editar el codigo, activar, cambiar el rol o eliminar <strong>usuarios</strong>.</li>
         <li>Crear o importar <strong>usuarios</strong> desde Excel.</li>
         <li>Gestionar <strong>aulas</strong>, sus categorías, ubicaciones y capacidades.</li>
-        <li>Crear <strong>aulas</strong>y categorías.</li>
+        <li>Crear <strong>aulas</strong> y categorías.</li>
         <li>Importar <strong>horarios de clase</strong> desde Excel.</li>
         <li>Gestionar <strong>franjas horarias</strong> para las reservas.</li>
         <li>Importar <strong>días no lectivos</strong> desde un PDF.</li>

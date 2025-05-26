@@ -66,8 +66,6 @@ class AulaController extends Controller
         $orden = $request->input('orden', 'nombre');
         $direccion = $request->input('direccion', 'asc');
 
-        $query->orderBy($orden, $direccion);
-
         $ordenables = [
             'codigo' => 'aulas.codigo',
             'nombre' => 'aulas.nombre',
@@ -79,6 +77,9 @@ class AulaController extends Controller
 
         if (array_key_exists($orden, $ordenables)) {
             $query->orderBy($ordenables[$orden], $direccion);
+        }else {
+            // Default por si no viene o es inválido
+            $query->orderBy('id', 'asc');
         }
             
         $aulas = $query->paginate(10)->appends($request->query());

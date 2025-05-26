@@ -87,7 +87,7 @@
         {{-- Botones --}}
         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <button type="submit" class="btn btn-success w-full sm:w-auto">Actualizar Aula</button>
-            <a href="{{ route('admin.aulas.manage') }}" class="btn btn-secondary w-full sm:w-auto">Cancelar</a>
+            <a href="{{ route('admin.aulas.manage') }}" class="btn btn-error w-full sm:w-auto">Cancelar</a>
         </div>
     </form>
 </div>

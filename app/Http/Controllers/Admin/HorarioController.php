@@ -21,6 +21,8 @@ class HorarioController extends Controller
             'hora_inicio' => 'required|date_format:H:i',
             'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
             'turno' => 'required|in:mañana,tarde,ambos',
+        ], [
+            'hora_fin.after' => 'La hora de fin debe ser posterior a la hora de inicio.',
         ]);
 
         // Comprobar solapamiento (permitiendo fin == inicio de otra franja)

@@ -31,7 +31,7 @@
     @endif
 
     {{-- Formulario de carga masiva --}}
-    <div class="bg-base-200 p-6 rounded-xl shadow">
+    <div class="bg-base-200 mt-4 p-6 rounded-xl shadow">
         <h3 class="text-xl font-bold mb-4">Carga masiva de usuarios</h3>
         <form action="{{ route('admin.users.create.confirm') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
@@ -51,7 +51,7 @@
                 {{-- Responsive layout --}}
                 <div class="space-y-4 md:hidden">
                     @foreach ($preview as $item)
-                        <div class="border p-4 rounded-lg {{ $item['valid'] ? ($item['exists'] ?? false ? 'border-yellow-500 bg-yellow-100 text-yellow-800' : 'border-green-500 bg-green-100 text-green-800') : 'border-red-500 bg-red-100 text-red-800' }}">
+                        <div class="border p-4 rounded-lg {{ $item['valid'] ? ($item['exists'] ?? false ? 'border-warning bg-warning text-warning-content' : 'border-success-content bg-success text-success-content') : 'border-error-content bg-error text-error-content' }}">
                             <p><strong>Código:</strong> {{ $item['codigo'] ?? '-' }}</p>
                             <p><strong>Nombre:</strong> {{ $item['name'] }}</p>
                             <p><strong>Apellidos:</strong> {{ $item['surname'] }}</p>
@@ -63,11 +63,11 @@
                             <p>
                                 <strong>Estado:</strong>
                                 @if(!$item['valid'])
-                                    ❌ {{ $item['error'] }}
+                                    {{ $item['error'] }}
                                 @elseif($item['exists'] ?? false)
-                                    ⚠️ Ya existe
+                                    Ya existe
                                 @else
-                                    ✅ Nuevo
+                                    Nuevo
                                 @endif
                             </p>
                         </div>
@@ -88,18 +88,18 @@
                         </thead>
                         <tbody>
                             @foreach ($preview as $item)
-                                <tr class="{{ $item['valid'] ? ($item['exists'] ?? false ? 'text-warning' : '') : 'text-error' }}">
+                                <tr>
                                     <td>{{ $item['codigo'] ?? '-' }}</td>
                                     <td>{{ $item['name'] }}</td>
                                     <td>{{ $item['surname'] }}</td>
                                     <td>{!! str_replace(['.', '@'], ['.<wbr>', '@<wbr>'], $item['email']) !!}</td>
-                                    <td>
+                                    <td class="{{ $item['valid'] ? ($item['exists'] ?? false ? 'text-warning' : 'text-success') : 'text-error' }}">
                                         @if(!$item['valid'])
-                                            ❌ {{ $item['error'] }}
+                                            {{ $item['error'] }}
                                         @elseif($item['exists'] ?? false)
-                                            ⚠️ Ya existe
+                                            Ya existe
                                         @else
-                                            ✅ Nuevo
+                                            Nuevo
                                         @endif
                                     </td>
                                 </tr>
